@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Servicios para el Hogar | Tu Experto en Casa</title>
+  <link rel="icon" href="static/Logo/logo_original.webp" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #ff5e00;
+      --gold-light: #e8c97a;
+      --dark: #0f0e0c;
+      --dark-2: #1a1915;
+      --dark-3: #252319;
+      --cream: #f5f0e8;
+      --cream-2: #ede8dd;
+      --text: #d4cfc4;
+      --text-dim: #8a8478;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ---- NOISE OVERLAY ---- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(15,14,12,0.95), transparent);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      max-width: 420px;
+      margin-bottom: 3rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 1rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary svg { transition: transform 0.3s; }
+    .btn-primary:hover svg { transform: translateX(4px); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.55) sepia(0.2);
+    }
+
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--dark) 0%, transparent 30%),
+                  linear-gradient(to top, var(--dark) 0%, transparent 40%);
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem;
+      right: 3rem;
+      z-index: 10;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 1.5rem;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero-badge span { display: block; }
+    .hero-badge .num { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+    .hero-badge .label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ---- STATS ---- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .stat {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(201,168,76,0.1);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+    }
+
+    /* ---- SERVICES ---- */
+    .section {
+      padding: 6rem 5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--cream);
+      line-height: 1.1;
+    }
+
+    .section-title em { color: var(--gold); font-style: italic; }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      max-width: 300px;
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(201,168,76,0.1);
+    }
+
+    .service-card {
+      background: var(--dark-2);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.4s;
+    }
+
+    .service-card:hover { background: var(--dark-3); }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.5s ease;
+    }
+
+    .service-card:hover::before { width: 100%; }
+
+    .service-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 1.8rem;
+      filter: brightness(0.7) sepia(0.15);
+      transition: filter 0.4s;
+    }
+
+    .service-card:hover .service-img { filter: brightness(0.85) sepia(0.1); }
+
+    .service-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-num {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: rgba(201,168,76,0.08);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.8rem;
+    }
+
+    .service-desc {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--text-dim);
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 1.2rem;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .service-card:hover .service-link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- WHY ---- */
+    .why {
+      background: var(--dark-2);
+      padding: 6rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .why-img-wrap {
+      position: relative;
+    }
+
+    .why-img-wrap img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      filter: brightness(0.65) sepia(0.15);
+    }
+
+    .why-img-accent {
+      position: absolute;
+      top: -1.5rem;
+      left: -1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      border: 1px solid rgba(201,168,76,0.3);
+      z-index: -1;
+    }
+
+    .why-features {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+    }
+
+    .why-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .why-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(201,168,76,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .why-item h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+
+    .why-item p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+    }
+
+    /* ---- CONTACT ---- */
+    .contact {
+      padding: 6rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-info h2 em { color: var(--gold); font-style: italic; }
+
+    .contact-info p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .contact-detail strong { color: var(--cream); }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    input, select, textarea {
+      background: var(--dark-2);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: var(--cream);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    select option { background: var(--dark-2); }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--dark-2);
+      padding: 3rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(201,168,76,0.1);
+    }
+
+    footer .logo { font-size: 1.1rem; }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- ANIMATIONS ---- */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- MOBILE ---- */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 6rem 2rem 2rem; }
+      .hero-right { height: 350px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 4rem 1.5rem; }
+      .section-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .section-sub { text-align: left; }
+      .services-grid { grid-template-columns: 1fr; }
+      .why, .contact { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+      .why-img-wrap img { height: 300px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ExpertoHogar</div>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">¿Por qué yo?</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Servicios profesionales del hogar</div>
+    <h1>Tu hogar en <em>las mejores</em> manos</h1>
+    <p class="hero-desc">Electricidad, plomería, pintura, puertas, instalación de TV y mucho más. Trabajo con dedicación, responsabilidad y a precios justos.</p>
+    <a href="#contacto" class="btn-primary">
+      Solicitar servicio
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80" alt="Técnico trabajando en el hogar" />
+    <div class="hero-badge">
+      <span class="num">8+</span>
+      <span class="label">Años de experiencia</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-num">500+</span>
+    <span class="stat-label">Clientes satisfechos</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">6</span>
+    <span class="stat-label">Servicios especializados</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">98%</span>
+    <span class="stat-label">Tasa de satisfacción</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">24h</span>
+    <span class="stat-label">Respuesta garantizada</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="servicios">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-tag">Lo que ofrezco</div>
+      <h2 class="section-title">Servicios <em>especializados</em><br>para tu hogar</h2>
+    </div>
+    <p class="section-sub">Cada trabajo realizado con herramientas profesionales y materiales de calidad.</p>
+  </div>
+
+  <div class="services-grid">
+
+    <div class="service-card fade-up">
+      <span class="service-num">01</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80" alt="Electricidad" />
+      <span class="service-icon">⚡</span>
+      <h3 class="service-name">Electricidad</h3>
+      <p class="service-desc">Instalación y reparación de tomacorrientes, interruptores, breakers, luminarias, ventiladores de techo y revisión del sistema eléctrico general.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">02</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&q=80" alt="Plomería" />
+      <span class="service-icon">🔧</span>
+      <h3 class="service-name">Plomería</h3>
+      <p class="service-desc">Reparación de fugas, destape de tuberías, instalación de grifos, llaves de paso, sanitarios, duchas y revisión de redes hidráulicas.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">03</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&q=80" alt="Pintura" />
+      <span class="service-icon">🖌️</span>
+      <h3 class="service-name">Pintura de paredes</h3>
+      <p class="service-desc">Pintura interior y exterior con acabados perfectos. Preparación de superficies, sellado de grietas y aplicación de pintura de alta calidad.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">04</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Puertas" />
+      <span class="service-icon">🚪</span>
+      <h3 class="service-name">Puertas y ventanas</h3>
+      <p class="service-desc">Arreglo de bisagras, cerraduras, marcos, ajuste de puertas que rozan, instalación de nuevas puertas y mantenimiento preventivo.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">05</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80" alt="Soporte TV" />
+      <span class="service-icon">📺</span>
+      <h3 class="service-name">Instalación de TV</h3>
+      <p class="service-desc">Instalación de bases y soportes para televisores en pared o techo. Ocultación de cables y conexión de equipos de forma segura y ordenada.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">06</span>
+      <img class="service-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80" alt="Mantenimiento general" />
+      <span class="service-icon">🏠</span>
+      <h3 class="service-name">Mantenimiento general</h3>
+      <p class="service-desc">Reparaciones menores, montaje de muebles, anclaje de objetos en pared, instalación de cortinas, persianas y otras labores del hogar.</p>
+      <a href="#contacto" class="service-link">Solicitar →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="nosotros">
+  <div class="why-img-wrap fade-up">
+    <div class="why-img-accent"></div>
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Experto trabajando" />
+  </div>
+  <div>
+    <div class="section-tag">¿Por qué elegirme?</div>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Experiencia que <em>marca<br>la diferencia</em></h2>
+    <div class="why-features">
+      <div class="why-item fade-up">
+        <div class="why-icon">✅</div>
+        <div>
+          <h4>Trabajo garantizado</h4>
+          <p>Cada servicio tiene garantía. Si algo no queda bien, regreso sin costo adicional a solucionarlo.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-icon">⏱️</div>
+        <div>
+          <h4>Puntualidad y respeto</h4>
+          <p>Llego a la hora acordada y mantengo tu espacio limpio y ordenado durante y después del trabajo.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-icon">💰</div>
+        <div>
+          <h4>Precios transparentes</h4>
+          <p>Presupuesto claro antes de comenzar. Sin costos ocultos ni sorpresas al finalizar.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-icon">🛠️</div>
+        <div>
+          <h4>Herramientas profesionales</h4>
+          <p>Trabajo con equipos de calidad para asegurar resultados duraderos y acabados impecables.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contacto">
+  <div class="contact-info fade-up">
+    <div class="section-tag">Hablemos</div>
+    <h2>¿Necesitas un<br><em>servicio hoy</em>?</h2>
+    <p>Escríbeme o llámame y con gusto te doy un presupuesto sin compromiso. Atiendo todos los días de la semana.</p>
+    <div class="contact-detail">
+      <span>📞</span>
+      <span><strong>+57 320 324 4138</strong></span>
+    </div>
+    <div class="contact-detail">
+      <span>💬</span>
+      <span><strong>WhatsApp disponible</strong></span>
+    </div>
+    <div class="contact-detail">
+      <span>📍</span>
+      <span>Bogotá, Mosquera, Funza, Madrid...</span>
+    </div>
+    <div class="contact-detail">
+      <span>🕐</span>
+      <span>Lunes a Viernes · 7:00am – 5:00pm</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">ExpertoHogar</div>
+  <p>© 2025 · Servicios para el hogar con calidad y garantía</p>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80 * (entry.target.dataset.delay || 0));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach((el, i) => {
+    el.dataset.delay = i % 3;
+    observer.observe(el);
+  });
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ ¡Enviado!';
+    btn.style.background = '#4caf88';
+    setTimeout(() => {
+      btn.innerHTML = 'Enviar solicitud <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // Smooth nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
